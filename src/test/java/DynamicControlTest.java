@@ -1,4 +1,4 @@
-package tests;
+package test;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -62,8 +62,8 @@ public class DynamicControlTest {
         driver.findElement(By.id("file-upload")).
                 sendKeys("C:\\Users\\user\\IdeaProjects\\SauceDemo\\A915940.docx");
         driver.findElement(By.id("file-submit")).click();
-        String message1 = driver.findElement(By.xpath("//*[@id='uploaded-files']")).getText();
-        Assert.assertEquals(message1,
+        String message = driver.findElement(By.xpath("//*[@id='uploaded-files']")).getText();
+        Assert.assertEquals(message,
                 "A915940.docx",
                 "Загружен неверный файл!");
         driver.quit();
@@ -75,6 +75,12 @@ public class DynamicControlTest {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         driver.manage().window().maximize();
         driver.get("https://the-internet.herokuapp.com/iframe");
-        // Не получается закрыть окно уведомление.
+        driver.findElement(By.xpath("//*[@tabindex='-1']")).click();
+        driver.switchTo().frame(driver.findElement(By.id("mce_0_ifr")));
+        String text = driver.findElement(By.id("tinymce")).getText();
+        Assert.assertEquals(text,
+                "Your content goes here.",
+                "Сообщения не найдено");
+        driver.switchTo().defaultContent();driver.quit();
     }
 }
